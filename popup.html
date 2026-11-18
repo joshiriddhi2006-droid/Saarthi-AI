@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Saarthi-AI - Accessible Web Companion</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-wrapper" role="region" aria-label="Saarthi-AI Accessibility Assistant">
+
+    <!-- ====================================================================
+         MAIN SAARTHI-AI ACCESSIBILITY INTERFACE
+         ==================================================================== -->
+    <div id="mainAppScreen" class="main-app-screen">
+      <!-- TOP: Header & Branding with Change Language Badge -->
+      <header class="app-header">
+        <div class="brand-row">
+          <div class="brand-logo" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <circle cx="12" cy="7" r="1.5"></circle>
+              <path d="M7 11h10"></path>
+              <path d="M12 11v8"></path>
+              <path d="M9 19l3-3 3 3"></path>
+            </svg>
+          </div>
+          <div class="brand-titles">
+            <h1 class="product-name">Saarthi-AI</h1>
+            <span class="product-badge">v1.2 Functional</span>
+          </div>
+          <!-- Clickable Language Badge / Switcher -->
+          <button type="button" id="headerLangBadgeBtn" class="header-lang-pill" title="Click to change preferred language" aria-label="Current language. Click to change.">
+            <span aria-hidden="true">🌐</span>
+            <span id="headerLangText">English</span>
+          </button>
+        </div>
+        <p class="product-tagline">
+          Your AI-powered accessibility companion for the web.
+        </p>
+      </header>
+
+      <!-- Page Context Bar -->
+      <section class="page-context-bar" aria-label="Webpage Context">
+        <div class="context-info">
+          <span class="context-dot" aria-hidden="true"></span>
+          <span id="activePageTitle" class="context-title" title="Detecting active page...">Detecting active page...</span>
+        </div>
+        <button type="button" id="analyzePageBtn" class="refresh-content-btn" title="Extract and refresh webpage content">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="23 4 23 10 17 10"></polyline>
+            <polyline points="1 20 1 14 7 14"></polyline>
+            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+          </svg>
+          <span id="analyzeBtnText">Analyze</span>
+        </button>
+      </section>
+
+      <!-- My Accessibility Setup (Multi-Preference Active Bar) -->
+      <section class="setup-section" aria-labelledby="setupHeading">
+        <div class="setup-header">
+          <h2 id="setupHeading" class="setup-title">My Accessibility Setup</h2>
+          <span class="setup-hint">Active modes:</span>
+        </div>
+        <div class="active-modes-bar" id="activeModesBar" role="list" aria-label="Active accessibility modes">
+          <!-- Rendered dynamically -->
+        </div>
+      </section>
+
+      <!-- CATEGORY SELECTION: "How can Saarthi help you?" -->
+      <nav class="category-nav-section" aria-label="Accessibility Categories">
+        <div class="category-nav-header">
+          <h2 class="category-main-title">How can Saarthi help you?</h2>
+          <span class="category-subtext">Select a category to view specialized tools:</span>
+        </div>
+
+        <!-- Six Clearly Separated Category Tabs -->
+        <div class="category-tabs" role="tablist" aria-label="Accessibility Assistance Categories">
+          <button type="button" role="tab" class="cat-tab active" id="tabVisual" aria-selected="true" aria-controls="panelVisual">
+            <span class="tab-icon" aria-hidden="true">👁️</span>
+            <span class="tab-label">Visual</span>
+          </button>
+          <button type="button" role="tab" class="cat-tab" id="tabHearing" aria-selected="false" aria-controls="panelHearing">
+            <span class="tab-icon" aria-hidden="true">🦻</span>
+            <span class="tab-label">Hearing</span>
+          </button>
+          <button type="button" role="tab" class="cat-tab" id="tabSpeech" aria-selected="false" aria-controls="panelSpeech">
+            <span class="tab-icon" aria-hidden="true">🎙️</span>
+            <span class="tab-label">Speech</span>
+          </button>
+          <button type="button" role="tab" class="cat-tab" id="tabCognitive" aria-selected="false" aria-controls="panelCognitive">
+            <span class="tab-icon" aria-hidden="true">🧠</span>
+            <span class="tab-label">Cognitive</span>
+          </button>
+          <button type="button" role="tab" class="cat-tab" id="tabMotor" aria-selected="false" aria-controls="panelMotor">
+            <span class="tab-icon" aria-hidden="true">🖐️</span>
+            <span class="tab-label">Motor</span>
+          </button>
+          <button type="button" role="tab" class="cat-tab" id="tabLanguage" aria-selected="false" aria-controls="panelLanguage">
+            <span class="tab-icon" aria-hidden="true">🌐</span>
+            <span class="tab-label">Language</span>
+          </button>
+        </div>
+      </nav>
+
+      <!-- MAIN INTERACTION & TOOL PANELS -->
+      <main class="main-content">
+
+        <!-- ====================================================================
+             1. VISUAL ASSISTANCE PANEL
+             ==================================================================== -->
+        <section id="panelVisual" class="tool-panel active" role="tabpanel" aria-labelledby="tabVisual">
+          <div class="panel-intro">
+            <span class="panel-tag">Visual Tools</span>
+            <p class="panel-desc">Text-to-speech reading, image inspection, and high-visibility highlighting.</p>
+          </div>
+
+          <!-- A. Read This Page -->
+          <div class="tool-card">
+            <div class="tool-card-header">
+              <span class="tool-title">🔊 Read This Page</span>
+              <span class="tool-status" id="ttsStatusBadge">Ready</span>
+            </div>
+            <p class="tool-note">Reads extracted visible content aloud using your browser's speech synthesizer.</p>
+            <div class="tool-btn-group">
+              <button type="button" id="startSpeechBtn" class="primary-action-btn">
+                ▶ Start Reading
+              </button>
+              <button type="button" id="stopSpeechBtn" class="secondary-action-btn" disabled>
+                ⏹ Stop
+              </button>
+            </div>
+          </div>
+
+          <!-- B. Describe Images -->
+          <div class="tool-card">
+            <div class="tool-card-header">
+              <span class="tool-title">🖼️ Describe Images</span>
+            </div>
+            <p class="tool-note">Inspects images on this page and retrieves available alt text descriptions.</p>
+            <button type="button" id="inspectImagesBtn" class="primary-action-btn">
+              Inspect Page Images
+            </button>
+          </div>
+
+          <!-- C. Find / Highlight on Webpage -->
+          <div class="tool-card">
+            <div class="tool-card-header">
+              <span class="tool-title">🎯 Find & Highlight</span>
+            </div>
+            <p class="tool-note">Locate any button, link, or text and scroll it into view with a glowing outline.</p>
+            <div class="input-action-row">
+              <input type="text" id="findInputVisual" class="tool-input" placeholder="e.g. 'registration', 'submit button'..." />
+              <button type="button" id="findBtnVisual" class="primary-action-btn compact">
+                Find
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====================================================================
+             2. HEARING ASSISTANCE PANEL
+             ==================================================================== -->
+        <section id="panelHearing" class="tool-panel" role="tabpanel" aria-labelledby="tabHearing" hidden>
+          <div class="panel-intro">
+            <span class="panel-tag">Hearing Tools</span>
+            <p class="panel-desc">Text alternatives and caption track detection for audio/video media.</p>
+          </div>
+
+          <!-- Text Alternative & Media Captions -->
+          <div class="tool-card">
+            <div class="tool-card-header">
+              <span class="tool-title">📝 Text Alternatives & Captions</span>
+            </div>
+            <p class="tool-note">Scans the current webpage for audio and video tracks to retrieve available captions and subtitles.</p>
+            <button type="button" id="detectCaptionsBtn" class="primary-action-btn">
+              Detect Captions on Page
+            </button>
+          </div>
+        </section>
+
+        <!-- ====================================================================
+             3. SPEECH ASSISTANCE PANEL (Microphone & Text)
+             ==================================================================== -->
+        <section id="panelSpeech" class="tool-panel" role="tabpanel" aria-labelledby="tabSpeech" hidden>
+          <div class="panel-intro">
+            <span class="panel-tag">Speech Tools</span>
+            <p class="panel-desc">Speak using your microphone or type requests into the assistant.</p>
+          </div>
+
+          <!-- Voice Input (Talk to Saarthi) -->
+          <div class="tool-card">
+            <div class="tool-card-header">
+              <span class="tool-title">🎙️ Talk to Saarthi (Voice Input)</span>
+              <span class="tool-status" id="voiceStatusBadge">Mic Ready</span>
+            </div>
+            <p class="tool-note">Click below to start voice recognition in your selected language:</p>
+            <button type="button" id="talkToSaarthiBtn" class="voice-hero-btn" aria-label="Talk to Saarthi via microphone">
+              <span class="mic-icon-circle" aria-hidden="true">🎙️</span>
+              <span id="talkBtnText">Talk to Saarthi</span>
+            </button>
+          </div>
+
+          <!-- Text Interaction Input -->
+          <div class="tool-card">
+            <div class="tool-card-header">
+              <span class="tool-title">💬 Text Assistant Input</span>
+            </div>
+            <p class="tool-note">Recognized speech or typed queries appear here:</p>
+            <div class="input-action-row">
+              <input type="text" id="accessibilityInput" class="tool-input" placeholder="Ask Saarthi anything about this webpage..." />
+              <button type="button" id="submitTextQueryBtn" class="primary-action-btn compact">
+                Ask
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====================================================================
+             4. COGNITIVE ASSISTANCE PANEL
+             ==================================================================== -->
+        <section id="panelCognitive" class="tool-panel" role="tabpanel" aria-labelledby="tabCognitive" hidden>
+          <div class="panel-intro">
+            <span class="panel-tag">Cognitive Tools</span>
+            <p class="panel-desc">Content simplification, concise extractive summaries, and plain explanations.</p>
+          </div>
+
+          <!-- A. Simplify This Page -->
+          <div class="tool-card">
+            <div class="tool-card-header">
+              <span class="tool-title">📄 Simplify This Page</span>
+            </div>
+            <p class="tool-note">Transforms dense webpage text into clear, decluttered bullet points with essential takeaways.</p>
+            <button type="button" id="simplifyContentBtn" class="primary-action-btn">
+              Simplify Page Content
+            </button>
+          </div>
+
+          <!-- B. Summarize This Page -->
+          <div class="tool-card">
+            <div class="tool-card-header">
+              <span class="tool-title">📋 Summarize This Page</span>
+            </div>
+            <p class="tool-note">Generates a concise extractive summary of headings and key information without inventing data.</p>
+            <button type="button" id="summarizeContentBtn" class="primary-action-btn">
+              Generate Summary
+            </button>
+          </div>
+
+          <!-- C. Explain Complex Sentence -->
+          <div class="tool-card">
+            <div class="tool-card-header">
+              <span class="tool-title">💡 Explain Difficult Text</span>
+            </div>
+            <p class="tool-note">Paste a complex paragraph or technical sentence to break it down:</p>
+            <div class="input-action-row">
+              <input type="text" id="explainInput" class="tool-input" placeholder="Paste difficult sentence or term..." />
+              <button type="button" id="explainBtn" class="primary-action-btn compact">
+                Explain
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====================================================================
+             5. MOTOR ASSISTANCE PANEL
+             ==================================================================== -->
+        <section id="panelMotor" class="tool-panel" role="tabpanel" aria-labelledby="tabMotor" hidden>
+          <div class="panel-intro">
+            <span class="panel-tag">Motor & Mobility Tools</span>
+            <p class="panel-desc">Guided navigation to help you target and locate form controls without manual hunting.</p>
+          </div>
+
+          <!-- Guided Navigation & Element Finder -->
+          <div class="tool-card">
+            <div class="tool-card-header">
+              <span class="tool-title">🧭 Guided Element Locator</span>
+            </div>
+            <p class="tool-note">Search for any interactive button or input. Saarthi scrolls to it and draws a bright halo (no auto-clicking for your safety).</p>
+            <div class="input-action-row">
+              <input type="text" id="motorFindInput" class="tool-input" placeholder="e.g. 'submit', 'email', 'login'..." />
+              <button type="button" id="motorFindBtn" class="primary-action-btn compact">
+                Locate & Scroll
+              </button>
+            </div>
+            <!-- Quick Locator Pills -->
+            <div class="quick-nav-pills" role="toolbar" aria-label="Common webpage targets">
+              <button type="button" class="nav-pill" data-target="submit">Submit</button>
+              <button type="button" class="nav-pill" data-target="email">Email</button>
+              <button type="button" class="nav-pill" data-target="search">Search</button>
+              <button type="button" class="nav-pill" data-target="login">Login / Sign In</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====================================================================
+             6. LANGUAGE ASSISTANCE PANEL
+             ==================================================================== -->
+        <section id="panelLanguage" class="tool-panel" role="tabpanel" aria-labelledby="tabLanguage" hidden>
+          <div class="panel-intro">
+            <span class="panel-tag">Language Tools</span>
+            <p class="panel-desc">Choose language for voice synthesis, speech recognition, and translation.</p>
+          </div>
+
+          <!-- Language Preference Selector with 5 Languages -->
+          <div class="tool-card">
+            <div class="tool-card-header">
+              <span class="tool-title">🌐 Active Language</span>
+              <span class="tool-status" id="currentLangBadge">English (en-US)</span>
+            </div>
+            <p class="tool-note">Sets language for speech recognition, narration, and translation targets:</p>
+            <div class="input-action-row">
+              <select id="languageSelector" class="tool-select" aria-label="Select preferred language">
+                <option value="en" selected>English (en-US)</option>
+                <option value="hi">Hindi - हिन्दी (hi-IN)</option>
+                <option value="es">Spanish - Español (es-ES)</option>
+                <option value="fr">French - Français (fr-FR)</option>
+                <option value="de">German - Deutsch (de-DE)</option>
+              </select>
+              <button type="button" id="applyLanguageBtn" class="primary-action-btn compact">
+                Save
+              </button>
+            </div>
+          </div>
+
+          <!-- Webpage Translation Action -->
+          <div class="tool-card">
+            <div class="tool-card-header">
+              <span class="tool-title">🔄 Webpage Translation</span>
+            </div>
+            <p class="tool-note">Translates the current webpage content into your selected language.</p>
+            <button type="button" id="translatePageBtn" class="primary-action-btn">
+              Translate Webpage
+            </button>
+          </div>
+        </section>
+
+        <!-- UNIFIED OUTPUT & FEEDBACK REGION -->
+        <section class="output-section" aria-labelledby="outputHeading">
+          <div class="output-header">
+            <h2 id="outputHeading" class="output-title">Assistant Feedback & Results</h2>
+            <span id="outputBadge" class="output-badge">Ready</span>
+          </div>
+          <div id="outputArea" class="output-box" role="status" aria-live="polite" tabindex="0">
+            <p class="output-placeholder">
+              Select a category above to start reading aloud, using voice input, finding elements, or translating content.
+            </p>
+          </div>
+        </section>
+
+        <!-- Quick Accessibility Setup Preferences -->
+        <section class="preferences-accordion">
+          <details id="setupDetails">
+            <summary class="pref-summary">
+              <span>⚙️ Customize My Accessibility Setup</span>
+              <span class="summary-arrow" aria-hidden="true">▾</span>
+            </summary>
+            <div class="pref-checkbox-list">
+              <label class="pref-check-item">
+                <input type="checkbox" id="prefVisual" class="setup-checkbox" checked>
+                <span>Visual Assistance</span>
+              </label>
+              <label class="pref-check-item">
+                <input type="checkbox" id="prefHearing" class="setup-checkbox">
+                <span>Hearing Assistance</span>
+              </label>
+              <label class="pref-check-item">
+                <input type="checkbox" id="prefSpeech" class="setup-checkbox" checked>
+                <span>Speech Assistance</span>
+              </label>
+              <label class="pref-check-item">
+                <input type="checkbox" id="prefCognitive" class="setup-checkbox" checked>
+                <span>Cognitive Assistance</span>
+              </label>
+              <label class="pref-check-item">
+                <input type="checkbox" id="prefMotor" class="setup-checkbox">
+                <span>Motor Assistance</span>
+              </label>
+              <label class="pref-check-item">
+                <input type="checkbox" id="prefLanguage" class="setup-checkbox">
+                <span>Language Assistance</span>
+              </label>
+            </div>
+          </details>
+        </section>
+
+      </main>
+
+      <!-- BOTTOM: Status Bar -->
+      <footer class="app-footer">
+        <div class="status-left">
+          <span class="status-indicator-dot" aria-hidden="true"></span>
+          <span class="status-text" id="footerStatusText">● Ready to help</span>
+        </div>
+        <div class="status-right">
+          <span class="conn-tag" id="connectionTag">Connected</span>
+        </div>
+      </footer>
+    </div>
+
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

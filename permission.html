@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Saarthi-AI - Microphone Permission</title>
+  <link rel="stylesheet" href="popup.css">
+  <style>
+    body {
+      width: 100vw;
+      min-width: 100vw;
+      max-width: 100vw;
+      height: 100vh;
+      max-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .permission-page-wrapper {
+      max-width: 480px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .permission-card {
+      padding: 32px 28px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 18px;
+      border-color: rgba(0, 242, 254, 0.35);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(0, 242, 254, 0.15);
+    }
+
+    .permission-icon-halo {
+      width: 58px;
+      height: 58px;
+      background: rgba(0, 242, 254, 0.15);
+      border: 1.5px solid rgba(0, 242, 254, 0.45);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--cyan-primary);
+      box-shadow: 0 0 24px rgba(0, 242, 254, 0.35);
+    }
+
+    .permission-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.01em;
+    }
+
+    .permission-tagline {
+      font-size: 14px;
+      color: var(--text-main);
+      line-height: 1.5;
+    }
+
+    .permission-action-btn {
+      width: 100%;
+      height: 48px;
+      background: linear-gradient(135deg, #0284c7 0%, #00f2fe 50%, #8b5cf6 100%);
+      color: #ffffff;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 15px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      box-shadow: 0 4px 18px rgba(0, 242, 254, 0.35);
+      transition: all var(--transition);
+      margin-top: 6px;
+    }
+
+    .permission-action-btn:hover {
+      background: linear-gradient(135deg, #0369a1 0%, #06b6d4 50%, #7c3aed 100%);
+      box-shadow: 0 4px 26px rgba(0, 242, 254, 0.55);
+      transform: translateY(-1px);
+    }
+
+    .status-msg-box {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      line-height: 1.45;
+      display: none;
+    }
+
+    .status-msg-box.success {
+      display: block;
+      background: rgba(52, 211, 153, 0.15);
+      border: 1px solid rgba(52, 211, 153, 0.4);
+      color: #34d399;
+    }
+
+    .status-msg-box.error {
+      display: block;
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #fca5a5;
+    }
+
+    .continue-btn {
+      width: 100%;
+      height: 44px;
+      background: rgba(52, 211, 153, 0.2);
+      border: 1.5px solid #34d399;
+      color: #ffffff;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 10px;
+      display: none;
+      transition: all var(--transition);
+    }
+
+    .continue-btn:hover {
+      background: rgba(52, 211, 153, 0.35);
+      box-shadow: 0 0 16px rgba(52, 211, 153, 0.4);
+    }
+  </style>
+</head>
+<body>
+  <div class="permission-page-wrapper">
+    <div class="permission-card glass-panel">
+      
+      <!-- Saarthi-AI Brand Header -->
+      <div class="brand-row" style="margin-bottom: 4px;">
+        <div class="brand-logo" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <circle cx="12" cy="7" r="1.5"></circle>
+            <path d="M7 11h10"></path>
+            <path d="M12 11v8"></path>
+            <path d="M9 19l3-3 3 3"></path>
+          </svg>
+        </div>
+        <div class="brand-titles">
+          <span class="product-name" style="font-size: 20px;">Saarthi-AI</span>
+          <span class="product-badge">Microphone Setup</span>
+        </div>
+      </div>
+
+      <!-- Main Icon Halo -->
+      <div class="permission-icon-halo" aria-hidden="true">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 1a4 4 0 0 0-4 4v7a4 4 0 0 0 8 0V5a4 4 0 0 0-4-4z"></path>
+          <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+          <line x1="12" y1="19" x2="12" y2="23"></line>
+          <line x1="8" y1="23" x2="16" y2="23"></line>
+        </svg>
+      </div>
+
+      <!-- Description Content -->
+      <h1 class="permission-title">Microphone Access Required</h1>
+      <p class="permission-tagline">
+        Allow microphone access to use Saarthi-AI voice input.
+      </p>
+
+      <!-- Status / Feedback Message -->
+      <div id="statusMsgBox" class="status-msg-box" role="status" aria-live="polite"></div>
+
+      <!-- Action Buttons -->
+      <button type="button" id="allowMicBtn" class="permission-action-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 1a4 4 0 0 0-4 4v7a4 4 0 0 0 8 0V5a4 4 0 0 0-4-4z"></path>
+          <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+        </svg>
+        <span>Allow Microphone</span>
+      </button>
+
+      <button type="button" id="continueBtn" class="continue-btn">
+        Continue to Saarthi-AI
+      </button>
+
+      <p style="font-size: 11.5px; color: var(--text-dim); margin-top: 4px;">
+        Chrome requires permission to be granted in an open tab. Saarthi-AI does not record or store your audio.
+      </p>
+
+    </div>
+  </div>
+
+  <script src="permission.js"></script>
+</body>
+</html>
